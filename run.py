@@ -11,6 +11,7 @@ import scoreinfer
 import run_train
 import data
 import visualize_original
+import numpy
 def start(args):
     
   keras.backend.clear_session()
