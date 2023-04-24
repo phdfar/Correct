@@ -8,6 +8,7 @@ from tensorflow.keras.preprocessing.image import load_img
 import io_config
 
 jsonf = {'train':'youtube_vis_train.json','valid':'youtube_vis_val.json'}
+
 def getinfo(args):
   base_dir=args.jsonpath+args.data+'/'
   dataset_json = args.jsonpath +jsonf[args.data]
@@ -108,7 +109,7 @@ class dataloader_2i(keras.utils.Sequence):
         batch_input_img_paths = self.input_img_paths[i : i + self.batch_size]
         x = np.zeros((self.batch_size,) + self.input_imagesize + (self.channel_input,), dtype="uint8")
         z = np.zeros((self.batch_size,) + self.input_imagesize + (1,), dtype="float32")
-        y = np.zeros((self.batch_size,) + (1,), dtype="float32")
+        y = np.zeros((self.batch_size,) + self.input_imagesize + (1,), dtype="float32")
         
         for j, path in enumerate(batch_input_img_paths):
             a,y[j] = io_config.run(self,path)
