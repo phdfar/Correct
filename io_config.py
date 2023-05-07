@@ -9,8 +9,8 @@ def NormalizeData(data):
 def run(myself,path):
 
   rgbpath = myself.baseinput+'train/JPEGImages/'+path['img']
-  gtpath = myself.baseinput+'/'+path['gt']
-  weakpath = myself.baseinput+'/'+path['weak']
+  gtpath = myself.basepath+'/'+path['gt']
+  weakpath = myself.basepath+'/'+path['weak']
     
   img  = np.asarray(load_img(rgbpath, target_size=myself.img_size,grayscale=False))
   weak = cv2.imread(weakpath,0)
