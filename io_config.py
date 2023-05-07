@@ -11,6 +11,8 @@ def run(myself,path):
   rgbpath = myself.baseinput+'train/JPEGImages/'+path['img']
   gtpath = myself.basepath+'/'+path['gt']
   weakpath = myself.basepath+'/'+path['weak']
+  if myself.task=='diff':
+    gtpath = myself.basepath+'/'+path['diff']
     
   img  = np.asarray(load_img(rgbpath, target_size=myself.img_size,grayscale=False))
   weak = cv2.imread(weakpath,0)
