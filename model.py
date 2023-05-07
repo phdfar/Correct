@@ -8,10 +8,10 @@ def network(args):
   if args.network=='inception_default':
     return inception_default(args.imagesize,args.channel_input)
   elif args.network=='correctness1':
-    return correctness1(args.imagesize,args.channel_input,args.loss)
+    return correctness1(args.imagesize,args.channel_input,args.loss,args.task)
 
   
-def correctness1(img_size,channel_input,loss):
+def correctness1(img_size,channel_input,loss,task):
     inputs1 = keras.Input(shape=img_size + (channel_input,))
     inputs2 = keras.Input(shape=img_size + (1,))
 
@@ -63,7 +63,11 @@ def correctness1(img_size,channel_input,loss):
     x = layers.Conv2D(4, 3, padding="same",activation="relu")(x)
 
     if loss=='BCE':
-      outputs = layers.Conv2D(2, 3, activation="softmax", padding="same")(x)
+      if task!='diff':
+        outputs = layers.Conv2D(2, 3, activation="softmax", padding="same")(x)
+      else:
+        outputs = layers.Conv2D(4, 3, activation="softmax", padding="same")(x)
+
     else:
       outputs = layers.Conv2D(1, 3, activation="softmax", padding="same")(x)
 
