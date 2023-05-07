@@ -63,9 +63,9 @@ def start(args):
     if args.loss=='BCE':
       mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
     elif args.loss=='TVR':
-      model.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
+      mymodel.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
     elif args.loss=='DICE':
-      model.compile(optimizer='adam', loss=dice_loss_sparse)
+      mymodel.compile(optimizer='adam', loss=dice_loss_sparse)
 
   
     callbacks = [
