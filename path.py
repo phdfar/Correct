@@ -6,6 +6,7 @@ from tensorflow import keras
 import numpy as np
 from tensorflow.keras.preprocessing.image import load_img
 import io_config
+from tensorflow.python.framework.sparse_tensor import struct_pb2
 
 jsonf = {'train':'youtube_vis_train.json','valid':'youtube_vis_val.json'}
 
@@ -20,34 +21,45 @@ def getinfo(args):
 def getinfo_train(args):
   base_dir=args.basepath+'train/'
   dataset_json = args.basepath +'youtube_vis_train.json'
-  meta_plus_path = args.basepath+ 'Segmentation/meta_plus_youtube_vis.pickle'
+  #meta_plus_path = args.basepath+ 'Segmentation/meta_plus_youtube_vis.pickle'
   #goodness_path = args.basepath+ 'Segmentation/Image_segmentation/Subsidiary/Goodness/allpath_goodness.pickle'
-  sample_path = args.basepath+ 'sample.pickle'
+  sample_path = args.basepath+ 'pair_sample/sample.obj'
 
-  dataset,meta_info,seqs =  data.parse_generic_video_dataset(base_dir, dataset_json)
+  with open(sample_path, 'rb') as handle:
+    sample_file = pickle.load(handle)
+
+  allframe_train=[];allframe_val=[];allframe_test=[]
+  random.Random(1337).shuffle(sample_file)
+  
+  lnt = len(sample_file); sp1 = int(0.8*lnt);sp2 = int(0.1*lnt)
+  allframe_train = sample_file[:sp1]
+  allframe_val = sample_file[sp1:sp1+sp2]
+  allframe_test = sample_file[sp1+sp2:]
+
+
+
+  #dataset,meta_info,seqs =  data.parse_generic_video_dataset(base_dir, dataset_json)
   
  
-    
-  with open(meta_plus_path, 'rb') as handle:
-    meta_plus = pickle.load(handle)
+  #with open(meta_plus_path, 'rb') as handle:
+  #  meta_plus = pickle.load(handle)
     
   #with open(goodness_path, 'rb') as handle:
   #  goodness_file = pickle.load(handle)   
   #good_train = goodness_file[0];good_val = goodness_file[1];good_test = goodness_file[2];
   
   
-  with open(sample_path, 'rb') as handle:
-    sample_file = pickle.load(handle)
+
       
   #print(good_train)
-  valid=[];
+  #valid=[];
 
     
-  for i in meta_plus:
-      valid.append(i['id'])
+  #for i in meta_plus:
+  #    valid.append(i['id'])
   
           
-  allframe_train=[];allframe_val=[];allframe_test=[]
+  
   
   """
   for seq in seqs:
@@ -85,6 +97,7 @@ def getinfo_train(args):
   print('Number Val frame : ',len(allframe_val))
   print('Number Test frame : ',len(allframe_test))
 
+  
   return allframe_train,allframe_val,allframe_test
 
 class dataloader_2i(keras.utils.Sequence):
@@ -106,10 +119,10 @@ class dataloader_2i(keras.utils.Sequence):
         self.branch_input = args.branch_input
         self.baseinput2=args.baseinput2
 
-        goodness_score = args.basepath+ 'Segmentation/Image_segmentation/Subsidiary/Goodness/goodness_score.pickle'
-        with open(goodness_score, 'rb') as handle:
-          goodness_score = pickle.load(handle)
-        self.goodness_score = goodness_score
+        #goodness_score = args.basepath+ 'Segmentation/Image_segmentation/Subsidiary/Goodness/goodness_score.pickle'
+        #with open(goodness_score, 'rb') as handle:
+        #  goodness_score = pickle.load(handle)
+        #self.goodness_score = goodness_score
 
     def __len__(self):
         return len(self.input_img_paths) // self.batch_size

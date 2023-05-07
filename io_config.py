@@ -7,6 +7,23 @@ def NormalizeData(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data))
 
 def run(myself,path):
+
+  rgbpath = myself.baseinput+'train/JPEGImages/'+path['img']
+  gtpath = myself.baseinput+'/'+path['gt']
+  weakpath = myself.baseinput+'/'+path['weak']
+    
+  img  = np.asarray(load_img(rgbpath, target_size=myself.img_size,grayscale=False))
+  weak = cv2.imread(weakpath,0)
+  gt = cv2.imread(gtpath,0)
+
+  dim = (myself.img_size[1],myself.img_size[0])
+  gt = cv2.resize(gt, dim, interpolation = cv2.INTER_NEAREST)
+  weak = cv2.resize(weak, dim, interpolation = cv2.INTER_NEAREST)
+
+  gt = np.expand_dims(gt,2)
+  weak = np.expand_dims(weak,2)
+
+  """
   frameindex= list(path.keys())[0]
   imagepath = path[frameindex][0]
   seq = path[frameindex][1]
@@ -32,5 +49,6 @@ def run(myself,path):
 
   y = myself.goodness_score[namey]
   y = np.expand_dims(y,0)
+  """
 
-  return x,y
+  return [img,weak],gt

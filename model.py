@@ -40,36 +40,29 @@ def correctness1(img_size,channel_input):
     previous_block_activation = z  # Set aside residual
     x = z
 
-    # Blocks 1, 2, 3 are identical apart from the feature depth.
-    for filters in [64, 128, 256]:
+    for filters in [128, 64]:
         x = layers.Activation("relu")(x)
-        x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+        x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
         x = layers.BatchNormalization()(x)
 
         x = layers.Activation("relu")(x)
-        x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+        x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
         x = layers.BatchNormalization()(x)
 
-        x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
+        x = layers.UpSampling2D(2)(x)
 
         # Project residual
-        residual = layers.Conv2D(filters, 1, strides=2, padding="same")(
-            previous_block_activation
-        )
+        residual = layers.UpSampling2D(2)(previous_block_activation)
+        residual = layers.Conv2D(filters, 1, padding="same")(residual)
         x = layers.add([x, residual])  # Add back residual
         previous_block_activation = x  # Set aside next residual
 
-    ### [Second half of the network: upsampling inputs] ###
-    
+    x = layers.Conv2D(32, 3, padding="same",activation="relu")(x)
+    x = layers.Conv2D(16, 3, padding="same",activation="relu")(x)
+    x = layers.Conv2D(8, 3, padding="same",activation="relu")(x)
+    x = layers.Conv2D(4, 3, padding="same",activation="relu")(x)
 
-    # Add a per-pixel classification layer
-    x = layers.Conv2D(128, 3, activation="relu", padding="valid")(x)
-    x = layers.Conv2D(64, 3, activation="relu", padding="valid")(x)
-    x = layers.Conv2D(32, 3, activation="relu", padding="valid")(x)
-    x = layers.Conv2D(16, 3, activation="relu", padding="valid")(x)
-    x = layers.Conv2D(8, 3, activation="relu", padding="valid")(x)
-    x = layers.Conv2D(4, 3, activation="relu", padding="valid")(x)
-    outputs = layers.Conv2D(2, 3, activation="softmax", padding="valid")(x)
+    outputs = layers.Conv2D(2, 3, activation="softmax", padding="same")(x)
 
 
     #outputs = layers.Conv2D(16, 3, activation="softmax", padding="same")(x)
