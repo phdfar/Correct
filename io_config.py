@@ -22,7 +22,12 @@ def run(myself,path):
   gt = cv2.resize(gt, dim, interpolation = cv2.INTER_NEAREST)
   weak = cv2.resize(weak, dim, interpolation = cv2.INTER_NEAREST)
 
-  gt = np.expand_dims(gt,2)
+  if myself.task=='diff':
+    gt = np.eye(4)[gt]
+
+  else:
+    gt = np.expand_dims(gt,2)
+  
   weak = np.expand_dims(weak,2)
 
   """
