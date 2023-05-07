@@ -94,7 +94,17 @@ def start(args):
     test_gen = dispatcher_loader[args.branch_input](args,allframe_test)    
     mymodel = load_model(args.model_dir)
     mymodel.evaluate(test_gen);
-    accuracy.start(mymodel,allframe_test,args.model_dir,args)
+
+    vs = []
+    for i in test_gen:
+      vs.append(i)
+
+    pred=mymodel.predict(test_gen);
+    import pickle
+    with open('pred.pickle', 'wb') as handle:
+      pickle.dump([pred,vs], handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    #accuracy.start(mymodel,allframe_test,args.model_dir,args)
 
     
     
