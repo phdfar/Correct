@@ -13,6 +13,27 @@ import keras.backend as K
 import matplotlib.pyplot as plt
 
 
+import tensorflow.keras.backend as K
+
+def dice_loss(y_true, y_pred):
+    smooth = 1.
+    y_true_f = K.flatten(y_true)
+    y_pred_f = K.flatten(y_pred)
+    intersection = K.sum(y_true_f * y_pred_f)
+    score = (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
+    return 1. - score
+
+def tversky_loss(beta):
+    def loss(y_true, y_pred):
+        smooth = 1.
+        y_true_pos = K.flatten(y_true)
+        y_pred_pos = K.flatten(y_pred)
+        true_pos = K.sum(y_true_pos * y_pred_pos)
+        false_neg = K.sum(y_true_pos * (1 - y_pred_pos))
+        false_pos = K.sum((1 - y_true_pos) * y_pred_pos)
+        return (1.0 - ((true_pos + smooth) / (true_pos + beta * false_neg + (1 - beta) * false_pos + smooth)))
+    return loss
+  
 def start(args):
 
   allframe_train,allframe_val,allframe_test = path.getinfo_train(args)
@@ -30,7 +51,13 @@ def start(args):
     mymodel.summary()
 
    
-    mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
+    if args.loss=='BCE':
+      mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
+    elif args.loss=='TVR':
+      model.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
+    elif args.loss=='DICE':
+      model.compile(optimizer='adam', loss=dice_loss)
+
   
     callbacks = [
         keras.callbacks.ModelCheckpoint(args.model_dir, save_best_only=True),CSVLogger(args.model_dir+'_log.csv', append=True, separator=',')
