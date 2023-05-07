@@ -24,6 +24,20 @@ def dice_loss_sparse(y_true, y_pred):
 
     return (1 - numerator / denominator)
   
+def tversky_loss_sparse(beta):
+    def loss(y_true, y_pred):
+        smooth = 1.
+        y_true_pos = K.argmax(y_true, axis=-1)
+        y_pred_pos = K.argmax(y_pred, axis=-1)
+        true_pos = K.cast(K.equal(y_true_pos, y_pred_pos), 'float32')
+        false_neg = K.sum((1 - true_pos) * y_true, axis=-1)
+        false_pos = K.sum((1 - true_pos) * y_pred, axis=-1)
+        tversky_index = (true_pos + smooth) / (true_pos + beta*false_neg + (1-beta)*false_pos + smooth)
+        return 1.0 - K.mean(tversky_index)
+
+    return loss
+  
+  
 def dice_loss(y_true, y_pred):
     smooth = 1.
     y_true_f = K.flatten(y_true)
@@ -63,7 +77,7 @@ def start(args):
     if args.loss=='BCE':
       mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
     elif args.loss=='TVR':
-      mymodel.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
+      mymodel.compile(optimizer='adam', loss=tversky_loss_sparse(beta=0.5))
     elif args.loss=='DICE':
       mymodel.compile(optimizer='adam', loss=dice_loss_sparse)
 
