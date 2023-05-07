@@ -15,6 +15,15 @@ import matplotlib.pyplot as plt
 
 import tensorflow.keras.backend as K
 
+
+def dice_loss_sparse(y_true, y_pred):
+    y_true = tf.squeeze(tf.cast(y_true, tf.int32), axis=-1)
+
+    numerator = 2 * tf.reduce_sum(tf.one_hot(y_true, 4) * y_pred, axis=(1, 2))
+    denominator = tf.reduce_sum(tf.one_hot(y_true, 4) + y_pred, axis=(1, 2))
+
+    return (1 - numerator / denominator)
+  
 def dice_loss(y_true, y_pred):
     smooth = 1.
     y_true_f = K.flatten(y_true)
@@ -56,7 +65,7 @@ def start(args):
     elif args.loss=='TVR':
       model.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
     elif args.loss=='DICE':
-      model.compile(optimizer='adam', loss=dice_loss)
+      model.compile(optimizer='adam', loss=dice_loss_sparse)
 
   
     callbacks = [

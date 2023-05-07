@@ -69,7 +69,7 @@ def correctness1(img_size,channel_input,loss,task):
         outputs = layers.Conv2D(4, 3, activation="softmax", padding="same")(x)
 
     else:
-      outputs = layers.Conv2D(1, 3, activation="softmax", padding="same")(x)
+      outputs = layers.Conv2D(4, 3, activation="softmax", padding="same")(x)
 
     # Define the model
     model = keras.Model([inputs1,inputs2],outputs)
