@@ -118,6 +118,7 @@ class dataloader_2i(keras.utils.Sequence):
         self.config=args.config
         self.branch_input = args.branch_input
         self.baseinput2=args.baseinput2
+        self.channel_output=args.channel_output
 
         #goodness_score = args.basepath+ 'Segmentation/Image_segmentation/Subsidiary/Goodness/goodness_score.pickle'
         #with open(goodness_score, 'rb') as handle:
@@ -133,7 +134,8 @@ class dataloader_2i(keras.utils.Sequence):
         batch_input_img_paths = self.input_img_paths[i : i + self.batch_size]
         x = np.zeros((self.batch_size,) + self.input_imagesize + (self.channel_input,), dtype="uint8")
         z = np.zeros((self.batch_size,) + self.input_imagesize + (1,), dtype="float32")
-        y = np.zeros((self.batch_size,) + self.input_imagesize + (1,), dtype="float32")
+        y = np.zeros((self.batch_size,) + self.input_imagesize + (self.channel_output,), dtype="float32")
+        
         
         for j, path in enumerate(batch_input_img_paths):
             a,y[j] = io_config.run(self,path)

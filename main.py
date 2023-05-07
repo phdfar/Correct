@@ -12,6 +12,9 @@ def main(args):
     #print(args.classid )
     if args.input_imagesize==0:
         args.input_imagesize=args.imagesize
+    
+    if args.loss!='BCE' and args.task=='diff':
+      args.channel_output=4
   
   run.start(args)
   return args 
@@ -19,6 +22,7 @@ def main(args):
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--channel_input', type=int ,default=3, required=False)
+    parser.add_argument('--channel_output', type=int ,default=1, required=False)
     parser.add_argument('--mode', type=str ,default='only_vis', required=False)
     parser.add_argument('--task', type=str ,default='semantic', required=False)
     parser.add_argument('--data', type=str ,default='train', required=False)
