@@ -14,6 +14,8 @@ def run(myself,path):
   
   
   img = np.asarray(load_img(myself.baseinput+'train/'+imagepath, target_size=myself.img_size,grayscale=False))
+  
+  
   sp = imagepath.split('/'); name=sp[-1].replace('.jpg','.pth.npy');eigpath = sp[-2]+'_'+name;
   eig = np.load(myself.baseinput2+eigpath) #data/VOC2012/eigs/laplacian/
     
