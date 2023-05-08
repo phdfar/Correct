@@ -6,7 +6,7 @@ from tensorflow import keras
 import numpy as np
 from tensorflow.keras.preprocessing.image import load_img
 import io_config
-from tensorflow.python.framework.sparse_tensor import struct_pb2
+#from tensorflow.python.framework.sparse_tensor import struct_pb2
 
 jsonf = {'train':'youtube_vis_train.json','valid':'youtube_vis_val.json'}
 
