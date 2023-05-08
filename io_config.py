@@ -9,10 +9,10 @@ def NormalizeData(data):
 def run(myself,path):
 
   rgbpath = myself.baseinput+'train/JPEGImages/'+path['img']
-  gtpath = myself.basepath+'/'+path['gt']
-  weakpath = myself.basepath+'/'+path['weak']
+  gtpath = myself.baseinput2+'/'+path['gt']
+  weakpath = myself.baseinput2+'/'+path['weak']
   if myself.task=='diff':
-    gtpath = myself.basepath+'/'+path['diff']
+    gtpath = myself.baseinput2+'/'+path['diff']
     
   img  = np.asarray(load_img(rgbpath, target_size=myself.img_size,grayscale=False))
   weak = cv2.imread(weakpath,0)

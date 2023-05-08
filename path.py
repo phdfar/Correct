@@ -19,11 +19,11 @@ def getinfo(args):
 
 
 def getinfo_train(args):
-  base_dir=args.basepath+'train/'
-  dataset_json = args.basepath +'youtube_vis_train.json'
+  #base_dir=args.basepath+'train/'
+  #dataset_json = args.basepath +'youtube_vis_train.json'
   #meta_plus_path = args.basepath+ 'Segmentation/meta_plus_youtube_vis.pickle'
   #goodness_path = args.basepath+ 'Segmentation/Image_segmentation/Subsidiary/Goodness/allpath_goodness.pickle'
-  sample_path = args.basepath+ 'pair_sample/sample.obj'
+  sample_path = args.baseinput2+ 'pair_sample/sample.obj'
 
   with open(sample_path, 'rb') as handle:
     sample_file = pickle.load(handle)
