@@ -22,7 +22,7 @@ def run(myself,path):
   gt = cv2.resize(gt, dim, interpolation = cv2.INTER_NEAREST)
   weak = cv2.resize(weak, dim, interpolation = cv2.INTER_NEAREST)
   
-  if myself.loss=='FOCAL':
+  if myself.gt=='SUB':
     gt = abs(gt-weak)
 
   if myself.loss!='BCE' and myself.task=='diff':
