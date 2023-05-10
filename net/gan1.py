@@ -204,15 +204,17 @@ def run(args,train_gen,val_gen,num_samples):
           msg = str(gan_loss[0])+'--'+str(gan_loss[1])+'--'+str(gan_loss[2])
           pbar.set_description("Generator Loss " + msg )
 
-      """
-      # Train generator
-      for ins in train_gen:
-          # Get batch of real samples
-          x_real, y_real = ins
+  generator.save(args.model_dir)
   
-          # Train generator using GAN model
-          gan_loss = gan.train_on_batch(x_real, [y_real, np.ones((args.batchsize, 1))])
-      """
+"""
+# Train generator
+for ins in train_gen:
+    # Get batch of real samples
+    x_real, y_real = ins
+
+    # Train generator using GAN model
+    gan_loss = gan.train_on_batch(x_real, [y_real, np.ones((args.batchsize, 1))])
+"""
 
       # Print losses
       
