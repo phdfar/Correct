@@ -11,7 +11,7 @@ import tensorflow as tf
 global argss
 import keras.backend as K
 import matplotlib.pyplot as plt
-
+from net import gan1
 
 import tensorflow.keras.backend as K
 
@@ -93,7 +93,7 @@ def start(args):
       
     else:
       if args.network=='gan1':
-        model.gan1.run(args,train_gen,val_gen,len(allframe_train))
+        gan1.run(args,train_gen,val_gen,len(allframe_train))
   
   if args.mode=='test':
     test_gen = dispatcher_loader[args.branch_input](args,allframe_test)    
