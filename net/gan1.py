@@ -190,7 +190,7 @@ def run(args,train_gen,val_gen,num_samples):
   
           # Generate fake samples and train discriminator on them
           x_fake = [x_real[0], x_real[1]]
-          y_fake = generator.predict(x_fake,verbos=False)
+          y_fake = generator.predict(x_fake,verbose=False)
           fake = np.zeros((args.batchsize,) + discriminator.output_shape[1:])
           d_loss_fake = discriminator.train_on_batch(y_fake, fake)
   
