@@ -5,7 +5,6 @@ import tensorflow as tf
 
 import random
 from tensorflow import keras
-import model
 from keras.models import load_model
 from keras.callbacks import CSVLogger
 import os
