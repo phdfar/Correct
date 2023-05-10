@@ -2,6 +2,7 @@ from tensorflow.keras import layers
 from tensorflow import keras
 from keras.models import load_model
 #from models.Spectral import run
+import model
 
 from keras.utils.vis_utils import plot_model
 def network(args):
@@ -9,7 +10,9 @@ def network(args):
     return inception_default(args.imagesize,args.channel_input)
   elif args.network=='correctness1':
     return correctness1(args.imagesize,args.channel_input,args.loss,args.task)
-
+  elif args.network=='gan1':
+    return model.gan1.model()
+  
   
 def correctness1(img_size,channel_input,loss,task):
     inputs1 = keras.Input(shape=img_size + (channel_input,))

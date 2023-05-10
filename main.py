@@ -48,6 +48,7 @@ if __name__ == '__main__':
     parser.add_argument('--loss', type=str , default='BCE', required=False)
     parser.add_argument('--config', type=int , default=0, required=False)
     parser.add_argument('--restore', type=bool , default=False, required=False)
+    parser.add_argument('--hardtrain', type=bool , default=False, required=False)
 
 
     args = parser.parse_args()

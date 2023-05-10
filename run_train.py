@@ -70,25 +70,30 @@ def start(args):
 
   keras.backend.clear_session()
   if args.mode=='train':
-    mymodel=model.network(args)
-    mymodel.summary()
-
-   
-    if args.loss=='BCE':
-      mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
-    elif args.loss=='TVR':
-      mymodel.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
-    elif args.loss=='DICE':
-      mymodel.compile(optimizer='adam', loss=dice_loss)
-
-  
-    callbacks = [
-        keras.callbacks.ModelCheckpoint(args.model_dir, save_best_only=True),CSVLogger(args.model_dir+'_log.csv', append=True, separator=',')
-    ]
-    if args.restore==True:
-      mymodel = load_model(args.model_dir)
+    
+    if args.hardtrain==False:
+      mymodel=model.network(args)
+      mymodel.summary()
       
-    mymodel.fit(train_gen, epochs=args.epoch, validation_data=val_gen, callbacks=callbacks)
+      if args.loss=='BCE':
+        mymodel.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
+      elif args.loss=='TVR':
+        mymodel.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
+      elif args.loss=='DICE':
+        mymodel.compile(optimizer='adam', loss=dice_loss)
+  
+    
+      callbacks = [
+          keras.callbacks.ModelCheckpoint(args.model_dir, save_best_only=True),CSVLogger(args.model_dir+'_log.csv', append=True, separator=',')
+      ]
+      if args.restore==True:
+        mymodel = load_model(args.model_dir)
+        
+      mymodel.fit(train_gen, epochs=args.epoch, validation_data=val_gen, callbacks=callbacks)
+      
+    else:
+      if args.network=='gan1':
+        model.gan1.run(args,train_gen,val_gen,len(allframe_train))
   
   if args.mode=='test':
     test_gen = dispatcher_loader[args.branch_input](args,allframe_test)    
