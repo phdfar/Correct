@@ -117,7 +117,7 @@ def start(args):
   
   if args.mode=='test':
     test_gen = dispatcher_loader[args.branch_input](args,allframe_test)
-    if args.loss='FOCAL':
+    if args.loss=='FOCAL':
       mymodel = load_model('my_model.h5', custom_objects={'focal_loss': focal_loss()})
     else:
       mymodel = load_model(args.model_dir)
