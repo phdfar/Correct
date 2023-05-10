@@ -16,6 +16,24 @@ from net import gan1
 import tensorflow.keras.backend as K
 
 
+def binary_focal_loss(gamma=2.0, alpha=0.25):
+    def focal_loss(y_true, y_pred):
+        # Clip the predicted values to prevent NaNs
+        y_pred = K.clip(y_pred, K.epsilon(), 1 - K.epsilon())
+
+        # Calculate cross-entropy loss
+        ce_loss = -y_true * tf.math.log(y_pred) - (1 - y_true) * tf.math.log(1 - y_pred)
+
+        # Calculate modulating factor
+        modulating_factor = K.pow(1 - y_pred, gamma)
+
+        # Calculate the final loss
+        loss = alpha * modulating_factor * ce_loss
+
+        return K.mean(loss, axis=-1)
+
+    return focal_loss
+  
 def dice_loss_sparse(y_true, y_pred):
     y_true = tf.squeeze(tf.cast(y_true, tf.int32), axis=-1)
 
@@ -81,6 +99,9 @@ def start(args):
         mymodel.compile(optimizer='adam', loss=tversky_loss(beta=0.5))
       elif args.loss=='DICE':
         mymodel.compile(optimizer='adam', loss=dice_loss)
+      elif args.loss=='FOCAL':
+          mymodel.compile(optimizer='adam', loss=binary_focal_loss) 
+        
   
     
       callbacks = [

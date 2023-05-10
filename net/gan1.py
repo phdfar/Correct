@@ -204,7 +204,7 @@ def run(args,train_gen,val_gen,num_samples):
           msg = str(gan_loss[0])+'--'+str(gan_loss[1])+'--'+str(gan_loss[2])
           pbar.set_description("Generator Loss " + msg )
 
-  generator.save(args.model_dir)
+      generator.save(args.model_dir)
   
 """
 # Train generator

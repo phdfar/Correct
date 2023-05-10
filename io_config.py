@@ -21,6 +21,9 @@ def run(myself,path):
   dim = (myself.img_size[1],myself.img_size[0])
   gt = cv2.resize(gt, dim, interpolation = cv2.INTER_NEAREST)
   weak = cv2.resize(weak, dim, interpolation = cv2.INTER_NEAREST)
+  
+  if myself.loss=='FOCAL':
+    gt = abs(gt-weak)
 
   if myself.loss!='BCE' and myself.task=='diff':
     gt = np.eye(4)[gt]
