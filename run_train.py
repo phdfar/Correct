@@ -99,7 +99,7 @@ def start(args):
       elif args.loss=='DICE':
         mymodel.compile(optimizer='adam', loss=dice_loss)
       elif args.loss=='FOCAL':
-          mymodel.compile(optimizer='adam', loss=binary_focal_loss()) 
+          mymodel.compile(optimizer='adam', loss=focal_loss()) 
         
   
     
